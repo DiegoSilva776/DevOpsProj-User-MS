@@ -1,0 +1,9 @@
+/Users/diego/Documents/Projects/MicroServicesProj1/SOA-Monolith/src/main/java/br/com/fish/devops/Application.java
+/Users/diego/Documents/Projects/MicroServicesProj1/SOA-Monolith/src/main/java/br/com/fish/devops/dto/pedido/ItemPedidoDTO.java
+/Users/diego/Documents/Projects/MicroServicesProj1/SOA-Monolith/src/main/java/br/com/fish/devops/domain/pedido/ItemPedido.java
+/Users/diego/Documents/Projects/MicroServicesProj1/SOA-Monolith/src/main/java/br/com/fish/devops/rest/PedidoRestService.java
+/Users/diego/Documents/Projects/MicroServicesProj1/SOA-Monolith/src/main/java/br/com/fish/devops/ApplicationConfig.java
+/Users/diego/Documents/Projects/MicroServicesProj1/SOA-Monolith/src/main/java/br/com/fish/devops/domain/pedido/Pedido.java
+/Users/diego/Documents/Projects/MicroServicesProj1/SOA-Monolith/src/main/java/br/com/fish/devops/domain/pedido/StatusPedido.java
+/Users/diego/Documents/Projects/MicroServicesProj1/SOA-Monolith/src/main/java/br/com/fish/devops/rest/ClienteRestService.java
+/Users/diego/Documents/Projects/MicroServicesProj1/SOA-Monolith/src/main/java/br/com/fish/devops/domain/cliente/Cliente.java

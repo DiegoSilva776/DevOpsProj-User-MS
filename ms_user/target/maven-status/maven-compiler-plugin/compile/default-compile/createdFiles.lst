@@ -1,0 +1,5 @@
+com/dms/devops/ApplicationConfig$JerseyConfig.class
+com/dms/devops/Application.class
+com/dms/devops/domain/cliente/Cliente.class
+com/dms/devops/rest/ClienteRestService.class
+com/dms/devops/ApplicationConfig.class

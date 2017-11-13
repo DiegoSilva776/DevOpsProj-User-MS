@@ -1,0 +1,10 @@
+br/com/fish/devops/rest/PedidoRestService.class
+br/com/fish/devops/domain/cliente/Cliente.class
+br/com/fish/devops/rest/ClienteRestService.class
+br/com/fish/devops/Application.class
+br/com/fish/devops/ApplicationConfig$JerseyConfig.class
+br/com/fish/devops/domain/pedido/ItemPedido.class
+br/com/fish/devops/domain/pedido/Pedido.class
+br/com/fish/devops/dto/pedido/ItemPedidoDTO.class
+br/com/fish/devops/ApplicationConfig.class
+br/com/fish/devops/domain/pedido/StatusPedido.class

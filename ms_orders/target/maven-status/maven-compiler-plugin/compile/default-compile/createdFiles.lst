@@ -1,0 +1,8 @@
+com/dms/devops/ApplicationConfig$JerseyConfig.class
+com/dms/devops/dto/pedido/ItemPedidoDTO.class
+com/dms/devops/domain/pedido/StatusPedido.class
+com/dms/devops/Application.class
+com/dms/devops/domain/pedido/Pedido.class
+com/dms/devops/PedidoRestService.class
+com/dms/devops/ApplicationConfig.class
+com/dms/devops/domain/pedido/ItemPedido.class
