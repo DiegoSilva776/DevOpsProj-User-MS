@@ -16,13 +16,11 @@ import java.util.Map;
 public class ClienteRestService {
 
 	private static final Logger logger = LogManager.getLogger(ClienteRestService.class.getName());
-
 	private static Map<Long, Cliente> clientes = new HashMap<Long, Cliente>();
-
 	private static long contadorErroCaotico;
 
-	static {
 
+	static {
 		Cliente cliente1 = new Cliente();
 		cliente1.setId(1);
 		cliente1.setNome("Cliente 1");
@@ -53,13 +51,11 @@ public class ClienteRestService {
 		clientes.put(cliente3.getId(), cliente3);
 		clientes.put(cliente4.getId(), cliente4);
 		clientes.put(cliente5.getId(), cliente5);
-
 	}
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public Collection<Cliente> getClientes() {
-
 		logger.info("Foram buscados " + clientes.values().size() + " clientes");
 
 		return clientes.values();
@@ -69,7 +65,6 @@ public class ClienteRestService {
 	@Path("cliente")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Cliente getCliente(@QueryParam("id") long id) {
-
 		Cliente cli = null;
 
 		for (Cliente c : clientes.values()) {
@@ -87,7 +82,6 @@ public class ClienteRestService {
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	public void addCliente(Cliente cliente) {
-
 		logger.warn("O cliente " + cliente.getId() + " foi inserido!");
 
 		clientes.put(cliente.getId(), cliente);
@@ -97,7 +91,6 @@ public class ClienteRestService {
 	@PUT
 	@Consumes(MediaType.APPLICATION_JSON)
 	public void mergeCliente(Cliente cliente) {
-
 		contadorErroCaotico++;
 
 		if ((contadorErroCaotico) % 7 == 0) {
@@ -111,12 +104,10 @@ public class ClienteRestService {
 
 		temp.setNome(cliente.getNome());
 		temp.setEmail(cliente.getEmail());
-
 	}
 
 	@DELETE
 	public void deleteCliente(@QueryParam("id") long id) {
-
 		logger.info("O cliente " + id + " foi excluido!");
 
 		clientes.remove(id);

@@ -13,7 +13,7 @@ public class ApplicationConfig {
 	@Named
 	static class JerseyConfig extends ResourceConfig {
 		public JerseyConfig() {
-			this.packages("br.com.fish.devops.rest");
+			this.packages("com.dms.devops.rest");
 		}
 	}
 

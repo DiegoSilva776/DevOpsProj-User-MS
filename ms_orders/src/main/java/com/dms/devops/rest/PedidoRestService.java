@@ -1,4 +1,4 @@
-package com.dms.devops;
+package com.dms.devops.rest;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -35,6 +35,7 @@ public class PedidoRestService {
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<Pedido> buscarPedidos() {
 		logger.info("foram buscados todos os pedidos!");
+		System.out.println("foram buscados todos os pedidos!");
 
 		return pedidosMock;
 	}
@@ -52,6 +53,7 @@ public class PedidoRestService {
 		}
 
 		logger.info("cliente " + idCliente + " possui " + pedidos.size() + " pedidos");
+		System.out.println("cliente " + idCliente + " possui " + pedidos.size() + " pedidos");
 
 		return pedidos;
 	}
@@ -80,7 +82,6 @@ public class PedidoRestService {
 
 				pedidoNovo = false;
 			}
-
 		}
 
 		if (pedidoNovo) {
@@ -94,10 +95,12 @@ public class PedidoRestService {
 			pedido.setStatus(StatusPedido.ABERTO);
 
 			pedidosMock.add(pedido);
-
 		}
 
 		logger.info("pedido " + item.getIdPedido() + " do cliente " + idCliente + " adicionou o produto "
+				+ item.getItem().getIdProduto());
+
+		System.out.println("pedido " + item.getIdPedido() + " do cliente " + idCliente + " adicionou o produto "
 				+ item.getItem().getIdProduto());
 	}
 
@@ -110,16 +113,15 @@ public class PedidoRestService {
 		for (Pedido pedido : pedidosMock) {
 
 			if (pedido.getId() == item.getIdPedido()) {
-
 				pedido.getItems().remove(item.getItem());
-
 				idCliente = pedido.getIdCliente();
-
 			}
-
 		}
 
 		logger.info("pedido " + item.getIdPedido() + " do cliente " + idCliente + " removeu o produto "
+				+ item.getItem().getIdProduto());
+
+		System.out.println("pedido " + item.getIdPedido() + " do cliente " + idCliente + " removeu o produto "
 				+ item.getItem().getIdProduto());
 	}
 
@@ -129,14 +131,13 @@ public class PedidoRestService {
 		for (Pedido pedido : pedidosMock) {
 
 			if (pedido.getId() == idPedido) {
-
 				pedido.setStatus(StatusPedido.CONCLUIDO);
-
 			}
-
 		}
 
 		logger.info("pedido " + idPedido + " efetivado");
+
+		System.out.println("pedido " + idPedido + " efetivado");
 	}
 
 	@DELETE
@@ -145,14 +146,19 @@ public class PedidoRestService {
 		for (Pedido pedido : pedidosMock) {
 
 			if (pedido.getId() == idPedido) {
-
 				pedido.setStatus(StatusPedido.CANCELADO);
-
 			}
-
 		}
 
 		logger.info("pedido " + idPedido + " cancelado");
+		System.out.println("pedido " + idPedido + " cancelado");
+	}
+
+	@GET
+	@Path("test/")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String test(@PathParam("idCliente") long idCliente) {
+		return "{'name':'asdfasdfasdf'}";
 	}
 
 }
