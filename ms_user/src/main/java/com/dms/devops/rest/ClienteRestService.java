@@ -70,7 +70,6 @@ public class ClienteRestService {
 
 			if (c.getId() == id)
 				cli = c;
-
 		}
 
 		logger.info("foi buscado o cliente " + cli.getNome());
