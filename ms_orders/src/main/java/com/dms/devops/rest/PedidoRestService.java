@@ -35,8 +35,7 @@ public class PedidoRestService {
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<Pedido> buscarPedidos() {
 		logger.info("foram buscados todos os pedidos!");
-		System.out.println("foram buscados todos os pedidos!");
-
+		
 		return pedidosMock;
 	}
 
@@ -53,8 +52,7 @@ public class PedidoRestService {
 		}
 
 		logger.info("cliente " + idCliente + " possui " + pedidos.size() + " pedidos");
-		System.out.println("cliente " + idCliente + " possui " + pedidos.size() + " pedidos");
-
+		
 		return pedidos;
 	}
 
@@ -99,9 +97,6 @@ public class PedidoRestService {
 
 		logger.info("pedido " + item.getIdPedido() + " do cliente " + idCliente + " adicionou o produto "
 				+ item.getItem().getIdProduto());
-
-		System.out.println("pedido " + item.getIdPedido() + " do cliente " + idCliente + " adicionou o produto "
-				+ item.getItem().getIdProduto());
 	}
 
 	@POST
@@ -120,9 +115,6 @@ public class PedidoRestService {
 
 		logger.info("pedido " + item.getIdPedido() + " do cliente " + idCliente + " removeu o produto "
 				+ item.getItem().getIdProduto());
-
-		System.out.println("pedido " + item.getIdPedido() + " do cliente " + idCliente + " removeu o produto "
-				+ item.getItem().getIdProduto());
 	}
 
 	@PUT
@@ -136,8 +128,6 @@ public class PedidoRestService {
 		}
 
 		logger.info("pedido " + idPedido + " efetivado");
-
-		System.out.println("pedido " + idPedido + " efetivado");
 	}
 
 	@DELETE
@@ -151,14 +141,13 @@ public class PedidoRestService {
 		}
 
 		logger.info("pedido " + idPedido + " cancelado");
-		System.out.println("pedido " + idPedido + " cancelado");
 	}
 
 	@GET
 	@Path("test/")
 	@Produces(MediaType.APPLICATION_JSON)
-	public String test(@PathParam("idCliente") long idCliente) {
-		return "{'name':'asdfasdfasdf'}";
+	public String test() {
+		return "OK - PedidoRestService: GET request to 'test/' endpoint";
 	}
 
 }

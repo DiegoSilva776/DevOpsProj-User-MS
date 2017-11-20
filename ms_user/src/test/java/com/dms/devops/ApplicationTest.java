@@ -12,7 +12,7 @@ public class ApplicationTest {
     @Test
     public void contextLoads() throws Exception {
         System.out.println("");
-        System.out.println(">>>>>>> ApplicationTest: The application context was built.");
+        System.out.println(">>>>>>> MS_User: ApplicationTest: OK. The application context was built.");
         System.out.println("");
     }
 
