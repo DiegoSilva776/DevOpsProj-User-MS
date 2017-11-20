@@ -9,11 +9,11 @@ import org.springframework.test.context.junit4.SpringRunner;
 @SpringBootTest
 public class ApplicationTest {
 
-    //private ClienteRestService clientService = new ClienteRestService();
-
     @Test
     public void contextLoads() throws Exception {
-        System.out.println(">>>>>>>>> Initialized ClienteService test class.");
+        System.out.println("");
+        System.out.println(">>>>>>> ApplicationTest: The application context was built.");
+        System.out.println("");
     }
 
 }

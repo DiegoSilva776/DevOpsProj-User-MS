@@ -1,5 +1,7 @@
 package com.dms.devops.rest;
 
+import org.springframework.stereotype.Controller;
+
 import com.dms.devops.domain.cliente.Cliente;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -11,6 +13,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+@Controller
 @Named
 @Path("/clienterest/")
 public class ClienteRestService {
