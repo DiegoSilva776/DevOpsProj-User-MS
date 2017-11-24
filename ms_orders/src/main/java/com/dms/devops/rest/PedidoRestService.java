@@ -1,8 +1,12 @@
 package com.dms.devops.rest;
 
+import org.springframework.stereotype.Controller;
+import org.springframework.beans.factory.annotation.Autowired;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.net.URI;
 
 import javax.inject.Named;
 import javax.ws.rs.Consumes;
@@ -22,6 +26,7 @@ import com.dms.devops.domain.pedido.Pedido;
 import com.dms.devops.domain.pedido.StatusPedido;
 import com.dms.devops.dto.pedido.ItemPedidoDTO;
 
+@Controller
 @Named
 @Path("/pedidorest/")
 public class PedidoRestService {
@@ -34,7 +39,7 @@ public class PedidoRestService {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<Pedido> buscarPedidos() {
-		logger.info("foram buscados todos os pedidos!");
+		logger.info("Uma busca por todos os pedidos foi executada!");
 		
 		return pedidosMock;
 	}
@@ -59,7 +64,7 @@ public class PedidoRestService {
 	@POST
 	@Path("item/adiciona")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public void adicionaItemPedido(ItemPedidoDTO item) {
+	public String adicionaItemPedido(ItemPedidoDTO item) {
 		contadorErroCaotico++;
 
 		if ((contadorErroCaotico) % 7 == 0) {
@@ -68,7 +73,6 @@ public class PedidoRestService {
 
 		// Se for pedido novo, cria, senao somente adiciona o item
 		long idCliente = 0;
-
 		boolean pedidoNovo = true;
 
 		for (Pedido pedido : pedidosMock) {
@@ -82,9 +86,9 @@ public class PedidoRestService {
 			}
 		}
 
-		if (pedidoNovo) {
-			Pedido pedido = new Pedido();
+		Pedido pedido = new Pedido();
 
+		if (pedidoNovo) {
 			idCliente = item.getIdCliente();
 			pedido.setId(item.getIdPedido());
 			pedido.setDataPedido(new Date());
@@ -95,8 +99,11 @@ public class PedidoRestService {
 			pedidosMock.add(pedido);
 		}
 
-		logger.info("pedido " + item.getIdPedido() + " do cliente " + idCliente + " adicionou o produto "
-				+ item.getItem().getIdProduto());
+		String responseBody = " pedido " + item.getIdPedido() + 
+						   	  " do cliente " + idCliente + 
+							  " adicionou o produto " + item.getItem().getIdProduto();
+
+		return responseBody;
 	}
 
 	@POST
