@@ -55,7 +55,7 @@ public class PedidoRestService {
 		long idCliente = 0;
 		boolean pedidoNovo = true;
 
-		for (Pedido pedido : pedidosMock) {
+		for (Pedido pedido : PedidoRestService.pedidosMock) {
 
 			if (pedido.getId() == item.getIdPedido()) {
 				pedido.getItems().add(item.getItem());
@@ -76,12 +76,12 @@ public class PedidoRestService {
 			pedido.getItems().add(item.getItem());
 			pedido.setStatus(StatusPedido.ABERTO);
 
-			pedidosMock.add(pedido);
+			PedidoRestService.pedidosMock.add(pedido);
 		}
 
-		logger.info(" O cliente " + idCliente + 
+		logger.info("\n\nO cliente " + idCliente + 
 					" adicionou o produto " + item.getItem().getIdProduto() +
-					" ao pedido " + item.getIdPedido());
+					" ao pedido " + item.getIdPedido() + "\n");
 
 		return pedido;
 	}
@@ -94,7 +94,7 @@ public class PedidoRestService {
 
 		long idCliente = 0;
 
-		for (Pedido pedido : pedidosMock) {
+		for (Pedido pedido : PedidoRestService.pedidosMock) {
 
 			if (pedido.getId() == item.getIdPedido()) {
 				pedido.getItems().remove(item.getItem());
@@ -102,8 +102,9 @@ public class PedidoRestService {
 			}
 		}
 
-		logger.info("pedido " + item.getIdPedido() + " do cliente " + idCliente + " removeu o produto "
-				+ item.getItem().getIdProduto());
+		logger.info("\n\nPedido " + item.getIdPedido() + 
+		            " do cliente " + idCliente + 
+					" removeu o produto " + item.getItem().getIdProduto() + "\n");
 	}
 
 	@PUT
@@ -111,14 +112,14 @@ public class PedidoRestService {
 	public void pagaPedido(@PathParam("idPedido") long idPedido) {
 		logger.info(Messages.MSG_CLIENT_HAS_PAID_ORDER);
 
-		for (Pedido pedido : pedidosMock) {
+		for (Pedido pedido : PedidoRestService.pedidosMock) {
 
 			if (pedido.getId() == idPedido) {
 				pedido.setStatus(StatusPedido.CONCLUIDO);
 			}
 		}
 
-		logger.info("pedido " + idPedido + " efetivado");
+		logger.info("\n\nPedido " + idPedido + " efetivado\n");
 	}
 
 	@DELETE
@@ -126,14 +127,14 @@ public class PedidoRestService {
 	public void cancelaPedido(@PathParam("idPedido") long idPedido) {
 		logger.info(Messages.MSG_CLIENT_HAS_CANCELED_ORDER);
 
-		for (Pedido pedido : pedidosMock) {
+		for (Pedido pedido : PedidoRestService.pedidosMock) {
 
 			if (pedido.getId() == idPedido) {
 				pedido.setStatus(StatusPedido.CANCELADO); 
 			}
 		}
 
-		logger.info("pedido " + idPedido + " cancelado");
+		logger.info("\n\nPedido " + idPedido + " cancelado\n");
 	}
 
 	@GET
@@ -141,24 +142,25 @@ public class PedidoRestService {
 	public List<Pedido> buscarPedidos() {
 		logger.info(Messages.MSG_SEARCHED_ORDERS);
 		
-		return pedidosMock;
+		return PedidoRestService.pedidosMock;
 	}
 
 	@GET
 	@Path("pedido/{idCliente}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<Pedido> buscarPedidosPorCliente(@PathParam("idCliente") long idCliente) {
-		logger.info(Messages.MSG_SEARCHED_ORDER_BY_CLIENT);
+		logger.info(Messages.MSG_SEARCHED_ORDER_BY_CLIENT + idCliente);
 
 		List<Pedido> pedidos = new ArrayList<Pedido>();
 		
-		for (Pedido pedido : pedidosMock) {
-
-			if (pedido.getIdCliente() == idCliente)
+		for (Pedido pedido : PedidoRestService.pedidosMock) {
+			
+			if (pedido.getIdCliente() == idCliente) {
 				pedidos.add(pedido);
+			}
 		}
 
-		logger.info("cliente " + idCliente + " possui " + pedidos.size() + " pedidos");
+		logger.info("\n\nCliente " + idCliente + " possui " + pedidos.size() + " pedidos\n");
 		
 		return pedidos;
 	}

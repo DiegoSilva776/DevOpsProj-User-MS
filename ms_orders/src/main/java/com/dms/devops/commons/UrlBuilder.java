@@ -19,4 +19,9 @@ public class UrlBuilder {
         return this.BASE_URL + this.port + "/pedidorest/item/adiciona/";
     }
 
+    public String getPedidoByCliente(long clientId) {
+        return this.BASE_URL + this.port + "/pedidorest/pedido/" + String.valueOf(clientId);
+    }
+
 }
+

@@ -55,6 +55,7 @@ public class HttpRequestTest {
     private TestRestTemplate restTemplate;
     private HttpHeaders headers = new HttpHeaders();
 
+
     @Test
     public void testAddPedido() throws Exception {
         logger.info("\n\n>>> MS_Orders: HttpRequestTest: testAddPedido:\n");
@@ -124,6 +125,7 @@ public class HttpRequestTest {
 
         // Verify the response        
         ArrayList<Pedido> pedidos = response.getBody();
+
         logger.info("Nós encontramos " + String.valueOf(pedidos.size()) + " Pedidos");
         
         // Is there at least one Pedido?
@@ -131,6 +133,48 @@ public class HttpRequestTest {
 
         // Test succeeded
         logger.info("\n\n>>> MS_Orders: HttpRequestTest: ./testGetPedidos:\n OK. We were able to make get the Pedidos.\n");
+    }
+
+    @Test
+    public void testGetPedidoByCliente() throws Exception {
+        logger.info("\n\n>>> MS_Orders: HttpRequestTest: testGetPedidoByCliente:\n");
+
+        // Set the search parameters
+        long CLIENT_ID = 0;
+
+        // Create and run the GET request 
+        UrlBuilder urlBuilder = new UrlBuilder(port);
+        ResponseEntity<ArrayList<Pedido>> response = this.restTemplate.exchange(
+            urlBuilder.getPedidoByCliente(CLIENT_ID),
+            HttpMethod.GET,
+            null,
+            new ParameterizedTypeReference<ArrayList<Pedido>>(){}
+        );
+
+        // Verify the response        
+        ArrayList<Pedido> pedidos = response.getBody();
+
+        logger.info("Nós encontramos " + String.valueOf(pedidos.size()) + " Pedidos");
+        
+        // Is there at least one Pedido?
+        assertThat(pedidos.size() > 0);
+
+        // The Pedidos really belong to the Cliente?
+        boolean pedidosBelongToCliente = true;
+
+        for (int i = 0; i < pedidos.size(); i++) {
+            Pedido pedido = pedidos.get(i);
+
+            if (pedido.getIdCliente() != CLIENT_ID) {
+                pedidosBelongToCliente = false;
+                break;
+            }
+        }
+
+        assertThat(pedidosBelongToCliente);
+
+        // Test succeeded
+        logger.info("\n\n>>> MS_Orders: HttpRequestTest: ./testGetPedidoByCliente:\n OK. We got the Cliente's Pedidos.\n");
     }
 
 }
