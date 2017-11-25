@@ -79,7 +79,7 @@ public class PedidoRestService {
 			PedidoRestService.pedidosMock.add(pedido);
 		}
 
-		logger.info("\n\nO cliente " + idCliente + 
+		logger.info("\n\n>O cliente " + idCliente + 
 					" adicionou o produto " + item.getItem().getIdProduto() +
 					" ao pedido " + item.getIdPedido() + "\n");
 
@@ -89,22 +89,28 @@ public class PedidoRestService {
 	@POST
 	@Path("item/remove")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public void removeItemPedido(ItemPedidoDTO item) {
-		logger.info(Messages.MSG_CLIENT_REMOVED_ITEM_FROM_ORDER);
+	public Pedido removeItemPedido(ItemPedidoDTO item) {
+		logger.info(Messages.MSG_CLIENT_REMOVED_ITEM_FROM_ORDER + item.getIdPedido());
 
+		// Se existe um Pedido com o id do Pedido passado na request, 
+		// remove o Item que também foi passado na request
 		long idCliente = 0;
+		Pedido updatedPedido = null;
 
 		for (Pedido pedido : PedidoRestService.pedidosMock) {
 
 			if (pedido.getId() == item.getIdPedido()) {
 				pedido.getItems().remove(item.getItem());
 				idCliente = pedido.getIdCliente();
+				updatedPedido = pedido;
 			}
 		}
 
-		logger.info("\n\nPedido " + item.getIdPedido() + 
-		            " do cliente " + idCliente + 
-					" removeu o produto " + item.getItem().getIdProduto() + "\n");
+		logger.info("\n\n>O cliente " + idCliente +
+		            " removeu o produto " + item.getItem().getIdProduto() +
+					" do pedido " + item.getIdPedido() + "\n");
+
+		return updatedPedido;
 	}
 
 	@PUT
@@ -112,6 +118,8 @@ public class PedidoRestService {
 	public void pagaPedido(@PathParam("idPedido") long idPedido) {
 		logger.info(Messages.MSG_CLIENT_HAS_PAID_ORDER);
 
+		// Se existe um Pedido com o id do Pedido passado na request, 
+		// altera o seus status para CONCLUIDO
 		for (Pedido pedido : PedidoRestService.pedidosMock) {
 
 			if (pedido.getId() == idPedido) {
@@ -119,7 +127,7 @@ public class PedidoRestService {
 			}
 		}
 
-		logger.info("\n\nPedido " + idPedido + " efetivado\n");
+		logger.info("\n\n>Pedido " + idPedido + " efetivado\n");
 	}
 
 	@DELETE
@@ -134,7 +142,7 @@ public class PedidoRestService {
 			}
 		}
 
-		logger.info("\n\nPedido " + idPedido + " cancelado\n");
+		logger.info("\n\n>Pedido " + idPedido + " cancelado\n");
 	}
 
 	@GET
@@ -160,7 +168,7 @@ public class PedidoRestService {
 			}
 		}
 
-		logger.info("\n\nCliente " + idCliente + " possui " + pedidos.size() + " pedidos\n");
+		logger.info("\n\n>Cliente " + idCliente + " possui " + pedidos.size() + " pedidos\n");
 		
 		return pedidos;
 	}

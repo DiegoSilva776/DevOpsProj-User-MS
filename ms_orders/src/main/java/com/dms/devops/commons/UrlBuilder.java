@@ -11,12 +11,16 @@ public class UrlBuilder {
         this.port = port;
     }
 
-    public String getPedidosUrl() {
-        return this.BASE_URL + this.port + "/pedidorest/";
-    }
-
     public String getAddPedidoUrl() {
         return this.BASE_URL + this.port + "/pedidorest/item/adiciona/";
+    }
+
+    public String getRemovePedidoUrl() {
+        return this.BASE_URL + this.port + "/pedidorest/item/remove/";
+    }
+
+    public String getPedidosUrl() {
+        return this.BASE_URL + this.port + "/pedidorest/";
     }
 
     public String getPedidoByCliente(long clientId) {

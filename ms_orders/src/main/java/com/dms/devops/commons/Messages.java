@@ -2,15 +2,25 @@ package com.dms.devops.commons;
 
 public class Messages {
     
-    // Success
-    public static String MSG_CLIENT_ADDED_ITEM_TO_ORDER = "\n\n>>>O cliente adicionou um novo item ao pedido\n";
-    public static String MSG_CLIENT_REMOVED_ITEM_FROM_ORDER = "\n\n>>>O cliente removeu um item do pedido\n";
-    public static String MSG_CLIENT_HAS_PAID_ORDER = "\n\n>>>O cliente atualizou um item do pedido\n";
-    public static String MSG_CLIENT_HAS_CANCELED_ORDER = "\n\n>>>O cliente cancelou o pedido\n";
-    public static String MSG_SEARCHED_ORDERS = "\n\n>>>Uma busca por todos os pedidos foi executada!\n";
-    public static String MSG_SEARCHED_ORDER_BY_CLIENT = "\n\n>>>Uma busca por um pedido de um cliente específico foi executada, cliente: \n";
+    // PedidoRestService method tags
+    public static String MSG_CLIENT_ADDED_ITEM_TO_ORDER = "\n\n>PedidoRestService: adicionaItemPedido: \n";
+    public static String MSG_CLIENT_REMOVED_ITEM_FROM_ORDER = "\n\n>PedidoRestService: removeItemPedido: \n";
+    public static String MSG_CLIENT_HAS_PAID_ORDER = "\n\n>PedidoRestService: pagaPedido: \n";
+    public static String MSG_CLIENT_HAS_CANCELED_ORDER = "\n\n>PedidoRestService: cancelaPedido: \n";
+    public static String MSG_SEARCHED_ORDERS = "\n\n>PedidoRestService: buscarPedidos: \n";
+    public static String MSG_SEARCHED_ORDER_BY_CLIENT = "\n\n>PedidoRestService: buscarPedidosPorCliente: \n";
+
+    // PedidoRestService HttpRequestTest method tags
+    public static String MSG_TEST_ADD_PEDIDO_OPENING = "\n\n>>> MS_Orders: HttpRequestTest: testAddPedido:\n";
+    public static String MSG_TEST_ADD_PEDIDO_CLOSURE = "\n\n>>> MS_Orders: HttpRequestTest: ./testAddPedido:\n OK. We were able to create a Pedido.\n";
+    public static String MSG_TEST_GET_ALL_PEDIDOS_OPENING = "\n\n>>> MS_Orders: HttpRequestTest: testGetPedidos:\n";
+    public static String MSG_TEST_GET_ALL_PEDIDOS_CLOSURE = "\n\n>>> MS_Orders: HttpRequestTest: ./testGetPedidos:\n OK. We were able to make get the Pedidos.\n";
+    public static String MSG_TEST_GET_PEDIDO_BY_CLIENT_OPENING = "\n\n>>> MS_Orders: HttpRequestTest: testGetPedidoByCliente:\n";
+    public static String MSG_TEST_GET_PEDIDO_BY_CLIENT_CLOSURE = "\n\n>>> MS_Orders: HttpRequestTest: ./testGetPedidoByCliente:\n OK. We got the Cliente's Pedidos.\n";
+    public static String MSG_TEST_REMOVE_ITEM_PEDIDO_OPENING = "\n\n>>> MS_Orders: HttpRequestTest: testRemoveItemPedido:\n";
+    public static String MSG_TEST_REMOVE_ITEM_PEDIDO_CLOSURE = "\n\n>>> MS_Orders: HttpRequestTest: ./testRemoveItemPedido:\n OK. We were able to remove and item from the Pedido.\n";
     
     // Errors
-    public static String MSG_ERROR_CRAZY_ERROR_OCURRED = "\n\n>>>Ocorreu um erro lokos!\n";
+    public static String MSG_ERROR_CRAZY_ERROR_OCURRED = "\n\n>Ocorreu um erro lokos!\n";
 
 }

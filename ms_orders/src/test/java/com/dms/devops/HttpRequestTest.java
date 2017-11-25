@@ -58,14 +58,14 @@ public class HttpRequestTest {
 
     @Test
     public void testAddPedido() throws Exception {
-        logger.info("\n\n>>> MS_Orders: HttpRequestTest: testAddPedido:\n");
+        logger.info(Messages.MSG_TEST_ADD_PEDIDO_OPENING);
 
         // Build a new Pedido
-        long ORDER_ID = 0;
-        long CLIENT_ID = 0;
         long PRODUCT_ID = 0;
         long QTD = 10;
-        
+        long ORDER_ID = 0;
+        long CLIENT_ID = 0;
+
         ItemPedido itemPedido = new ItemPedido();
         itemPedido.setIdProduto(PRODUCT_ID);
         itemPedido.setQuantidade(QTD);
@@ -107,12 +107,12 @@ public class HttpRequestTest {
         assertThat(hasSameItem);
         
         // Test succeeded
-        logger.info("\n\n>>> MS_Orders: HttpRequestTest: ./testAddPedido:\n OK. We were able to create a Pedido.\n");
+        logger.info(Messages.MSG_TEST_ADD_PEDIDO_CLOSURE);
     }
 
     @Test
     public void testGetPedidos() throws Exception {
-        logger.info("\n\n>>> MS_Orders: HttpRequestTest: testGetPedidos:\n");
+        logger.info(Messages.MSG_TEST_GET_ALL_PEDIDOS_OPENING);
 
         // Create and run the GET request 
         UrlBuilder urlBuilder = new UrlBuilder(port);
@@ -126,21 +126,19 @@ public class HttpRequestTest {
         // Verify the response        
         ArrayList<Pedido> pedidos = response.getBody();
 
-        logger.info("Nós encontramos " + String.valueOf(pedidos.size()) + " Pedidos");
-        
         // Is there at least one Pedido?
         assertThat(pedidos.size() > 0);
 
         // Test succeeded
-        logger.info("\n\n>>> MS_Orders: HttpRequestTest: ./testGetPedidos:\n OK. We were able to make get the Pedidos.\n");
+        logger.info(Messages.MSG_TEST_GET_ALL_PEDIDOS_CLOSURE);
     }
 
     @Test
     public void testGetPedidoByCliente() throws Exception {
-        logger.info("\n\n>>> MS_Orders: HttpRequestTest: testGetPedidoByCliente:\n");
+        logger.info(Messages.MSG_TEST_GET_PEDIDO_BY_CLIENT_OPENING);
 
-        // Set the search parameters
-        long CLIENT_ID = 0;
+        // Build the search params
+        long CLIENT_ID = 0;    
 
         // Create and run the GET request 
         UrlBuilder urlBuilder = new UrlBuilder(port);
@@ -154,8 +152,6 @@ public class HttpRequestTest {
         // Verify the response        
         ArrayList<Pedido> pedidos = response.getBody();
 
-        logger.info("Nós encontramos " + String.valueOf(pedidos.size()) + " Pedidos");
-        
         // Is there at least one Pedido?
         assertThat(pedidos.size() > 0);
 
@@ -174,7 +170,61 @@ public class HttpRequestTest {
         assertThat(pedidosBelongToCliente);
 
         // Test succeeded
-        logger.info("\n\n>>> MS_Orders: HttpRequestTest: ./testGetPedidoByCliente:\n OK. We got the Cliente's Pedidos.\n");
+        logger.info(Messages.MSG_TEST_GET_PEDIDO_BY_CLIENT_CLOSURE);
+    }
+
+    @Test
+    public void testRemoveItemPedido() throws Exception {
+        logger.info(Messages.MSG_TEST_REMOVE_ITEM_PEDIDO_OPENING);
+
+        // Build the object that carries the values necessary to remove an item from a Pedido
+        long PRODUCT_ID = 0;
+        long QTD = 10;
+        long ORDER_ID = 0;
+        
+        ItemPedido itemPedido = new ItemPedido();
+        itemPedido.setIdProduto(PRODUCT_ID);
+        itemPedido.setQuantidade(QTD);
+
+        ItemPedidoDTO requestRemovePedido = new ItemPedidoDTO();
+        requestRemovePedido.setIdPedido(ORDER_ID);
+        requestRemovePedido.setItem(itemPedido);
+        
+        // Create and run the POST request 
+        UrlBuilder urlBuilder = new UrlBuilder(port);
+        HttpEntity<ItemPedidoDTO> entity = new HttpEntity<ItemPedidoDTO>(requestRemovePedido, headers);
+		ResponseEntity<Pedido> response = restTemplate.exchange(
+            urlBuilder.getRemovePedidoUrl(), 
+            HttpMethod.POST, 
+            entity, 
+            Pedido.class
+        );
+
+        // Verify the response
+        Pedido updatedPedido = response.getBody();
+        
+        // Pedido object doesn't contain the removed item?
+        if (updatedPedido.getItems() != null) {
+
+            if (updatedPedido.getItems().size() > 0) {
+                boolean doesntHaveRemovedItem = true;
+
+                for (int i = 0; i < updatedPedido.getItems().size(); i ++) {
+                    ItemPedido item = updatedPedido.getItems().get(i);
+
+                    if (item.getIdProduto() == itemPedido.getIdProduto() && 
+                        item.getQuantidade() == itemPedido.getQuantidade()) {
+                        doesntHaveRemovedItem = false;
+                        break;
+                    }
+                }
+
+                assertThat(doesntHaveRemovedItem);
+            }
+        }
+        
+        // Test succeeded
+        logger.info(Messages.MSG_TEST_REMOVE_ITEM_PEDIDO_CLOSURE);
     }
 
 }

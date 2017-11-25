@@ -24,9 +24,7 @@ public class ItemPedido {
 
 	@Override
 	public boolean equals(Object obj) {
-
 		ItemPedido item = (ItemPedido) obj;
-
 		return idProduto == item.getIdProduto() ? true : false;
 	}
 
