@@ -20,10 +20,7 @@ public class SmokeTest {
     @Test
     public void contexLoads() throws Exception {
         assertThat(pedidoService).isNotNull();
-
-        System.out.println("");
-        System.out.println(">>>>>>> MS_Orders: SmokeTest: OK. The PedidoRestServe was AutoWired.");
-        System.out.println("");
+        System.out.println("\n\n>>> MS_Orders: SmokeTest:\n OK. The PedidoRestServe was AutoWired.\n");
     }
 
 }

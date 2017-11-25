@@ -46,7 +46,6 @@ public class Pedido {
 	}
 
 	public List<ItemPedido> getItems() {
-
 		if (items == null) {
 			items = new ArrayList<ItemPedido>();
 		}
@@ -60,10 +59,20 @@ public class Pedido {
 
 	@Override
 	public boolean equals(Object obj) {
-
 		Pedido pedido = (Pedido) obj;
 
 		return id == pedido.getId() ? true : false;
+	}
+
+	@Override
+	public String toString() {
+		try {
+			return "Pedido: " + String.valueOf(this.getId()) + 
+		       ", cliente: " + String.valueOf(this.getIdCliente()) +
+			   ", qtd. itens: " + String.valueOf(this.getItems().size());
+		} catch(Exception e) {
+			return "Failed to build toString() method of this Pedido object " + e.getMessage();
+		}
 	}
 
 }

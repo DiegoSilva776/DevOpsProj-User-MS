@@ -4,9 +4,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.junit.runners.MethodSorters;
+import org.junit.FixMethodOrder;
 
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.test.context.junit4.SpringRunner;
-
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.boot.test.context.SpringBootTest;
@@ -28,14 +30,23 @@ import okhttp3.RequestBody;
 import okhttp3.Call;
 import okhttp3.FormBody;
 
+import java.util.ArrayList;
+
+import com.dms.devops.commons.Messages;
+import com.dms.devops.commons.UrlBuilder;
+
 import com.dms.devops.rest.PedidoRestService;
 import com.dms.devops.dto.pedido.ItemPedidoDTO;
 import com.dms.devops.domain.pedido.ItemPedido;
+import com.dms.devops.domain.pedido.Pedido;
 
 
 @RunWith(SpringRunner.class)
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 public class HttpRequestTest {
+
+    private static final Logger logger = LogManager.getLogger(PedidoRestService.class.getName());
 
     @LocalServerPort
     private int port;
@@ -44,64 +55,82 @@ public class HttpRequestTest {
     private TestRestTemplate restTemplate;
     private HttpHeaders headers = new HttpHeaders();
 
-    private static final Logger logger = LogManager.getLogger(PedidoRestService.class.getName());
-
-    /**
-     * Verify if is possible to make a simple GET request
-     */
-    @Test
-    public void testMakeSimpleGetRequest() throws Exception {
-        String TEST_ENDPOINT_URL = "http://localhost:" + port + "/pedidorest/test/";
-
-        // Run the request
-        String response = this.restTemplate.getForObject(TEST_ENDPOINT_URL, String.class);
-        assertThat(response).contains("OK - PedidoRestService: GET request to 'test/' endpoint");
-        
-        // Test succeeded
-        logger.info("\n>>> MS_Orders: basicTestGetRequest: OK. We were able to make a simple GET request.\n");
-    }
-
-    /**
-     * Try to add a Pedido to the list of pedidos
-     */
     @Test
     public void testAddPedido() throws Exception {
-        // Build the request Add request
-        String ADD_PEDIDO_ENDPOINT_URL = "http://localhost:" + port + "/pedidorest/item/adiciona";
+        logger.info("\n\n>>> MS_Orders: HttpRequestTest: testAddPedido:\n");
 
-        // Run the POST request
-        ItemPedidoDTO requestAddPedido = new ItemPedidoDTO();
+        // Build a new Pedido
+        long ORDER_ID = 0;
+        long CLIENT_ID = 0;
+        long PRODUCT_ID = 0;
+        long QTD = 10;
+        
         ItemPedido itemPedido = new ItemPedido();
+        itemPedido.setIdProduto(PRODUCT_ID);
+        itemPedido.setQuantidade(QTD);
 
-        itemPedido.setIdProduto(0);
-        itemPedido.setQuantidade(10);
-
-        requestAddPedido.setIdPedido(0);
-        requestAddPedido.setIdCliente(0);
+        ItemPedidoDTO requestAddPedido = new ItemPedidoDTO();
+        requestAddPedido.setIdPedido(ORDER_ID);
+        requestAddPedido.setIdCliente(CLIENT_ID);
         requestAddPedido.setItem(itemPedido);
 
-		HttpEntity<ItemPedidoDTO> entity = new HttpEntity<ItemPedidoDTO>(requestAddPedido, headers);
-		ResponseEntity<String> response = restTemplate.exchange(ADD_PEDIDO_ENDPOINT_URL, HttpMethod.POST, entity, String.class);
-        assertThat(response.toString()).contains("adicionou o produto");
+        // Create and run the POST request 
+        UrlBuilder urlBuilder = new UrlBuilder(port);
+        HttpEntity<ItemPedidoDTO> entity = new HttpEntity<ItemPedidoDTO>(requestAddPedido, headers);
+		ResponseEntity<Pedido> response = restTemplate.exchange(
+            urlBuilder.getAddPedidoUrl(), 
+            HttpMethod.POST, 
+            entity, 
+            Pedido.class
+        );
 
+        // Verify the response
+        Pedido newPedido = response.getBody();
+        
+        // Pedido object contains the same client and order ids?
+        assertThat(newPedido.getId() == ORDER_ID);
+        assertThat(newPedido.getIdCliente() == CLIENT_ID);
+        
+        // Pedido object contains the new item?
+        boolean hasSameItem = false;
+
+        for(int i = 0; i < newPedido.getItems().size(); i ++) {
+            ItemPedido item = newPedido.getItems().get(i);
+
+            if (item.getIdProduto() == PRODUCT_ID && item.getQuantidade() == QTD) {
+                hasSameItem = true;
+                break;
+            }
+        }
+
+        assertThat(hasSameItem);
+        
         // Test succeeded
-        logger.info("\n>>> MS_Orders: testAddPedido: OK. We were able to create a Pedido and GET it.\n");
+        logger.info("\n\n>>> MS_Orders: HttpRequestTest: ./testAddPedido:\n OK. We were able to create a Pedido.\n");
     }
 
-    /**
-     * Try to get an empty list or a list with N Pedido objects
-     */
     @Test
     public void testGetPedidos() throws Exception {
-        // Build the GET request
-        String GET_PEDIDOS_ENDPOINT_URL = "http://localhost:" + port + "/pedidorest/";
+        logger.info("\n\n>>> MS_Orders: HttpRequestTest: testGetPedidos:\n");
 
-        // Run the GET request
-        String response = this.restTemplate.getForObject(GET_PEDIDOS_ENDPOINT_URL, String.class);
-        assertThat("[");
+        // Create and run the GET request 
+        UrlBuilder urlBuilder = new UrlBuilder(port);
+        ResponseEntity<ArrayList<Pedido>> response = this.restTemplate.exchange(
+            urlBuilder.getPedidosUrl(),
+            HttpMethod.GET,
+            null,
+            new ParameterizedTypeReference<ArrayList<Pedido>>(){}
+        );
+
+        // Verify the response        
+        ArrayList<Pedido> pedidos = response.getBody();
+        logger.info("Nós encontramos " + String.valueOf(pedidos.size()) + " Pedidos");
+        
+        // Is there at least one Pedido?
+        assertThat(pedidos.size() > 0);
 
         // Test succeeded
-        logger.info("\n>>> MS_Orders: testGetPedidos: OK. We were able to make a simple GET request.\n");
+        logger.info("\n\n>>> MS_Orders: HttpRequestTest: ./testGetPedidos:\n OK. We were able to make get the Pedidos.\n");
     }
 
 }

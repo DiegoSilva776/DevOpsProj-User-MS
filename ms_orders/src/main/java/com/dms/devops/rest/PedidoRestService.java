@@ -22,6 +22,8 @@ import javax.ws.rs.core.MediaType;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.dms.devops.commons.Messages;
+
 import com.dms.devops.domain.pedido.Pedido;
 import com.dms.devops.domain.pedido.StatusPedido;
 import com.dms.devops.dto.pedido.ItemPedidoDTO;
@@ -36,42 +38,20 @@ public class PedidoRestService {
 	private static long contadorErroCaotico;
 
 
-	@GET
-	@Produces(MediaType.APPLICATION_JSON)
-	public List<Pedido> buscarPedidos() {
-		logger.info("Uma busca por todos os pedidos foi executada!");
-		
-		return pedidosMock;
-	}
-
-	@GET
-	@Path("pedido/{idCliente}")
-	@Produces(MediaType.APPLICATION_JSON)
-	public List<Pedido> buscarPedidosPorCliente(@PathParam("idCliente") long idCliente) {
-		List<Pedido> pedidos = new ArrayList<Pedido>();
-		
-		for (Pedido pedido : pedidosMock) {
-
-			if (pedido.getIdCliente() == idCliente)
-				pedidos.add(pedido);
-		}
-
-		logger.info("cliente " + idCliente + " possui " + pedidos.size() + " pedidos");
-		
-		return pedidos;
-	}
-
 	@POST
 	@Path("item/adiciona")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public String adicionaItemPedido(ItemPedidoDTO item) {
+	public Pedido adicionaItemPedido(ItemPedidoDTO item) {
+		logger.info(Messages.MSG_CLIENT_ADDED_ITEM_TO_ORDER);
+
+		// Simula um erro de tempos em tempos
 		contadorErroCaotico++;
 
 		if ((contadorErroCaotico) % 7 == 0) {
-			throw new RuntimeException("Ocorreu um erro lokos!");
+			throw new RuntimeException(Messages.MSG_ERROR_CRAZY_ERROR_OCURRED);
 		}
 
-		// Se for pedido novo, cria, senao somente adiciona o item
+		// Se o pedido já existe, adiciona o novo item
 		long idCliente = 0;
 		boolean pedidoNovo = true;
 
@@ -81,11 +61,11 @@ public class PedidoRestService {
 				pedido.getItems().add(item.getItem());
 
 				idCliente = pedido.getIdCliente();
-
 				pedidoNovo = false;
 			}
 		}
 
+		// Cria um novo pedido com o item, se o pedido ainda não existir
 		Pedido pedido = new Pedido();
 
 		if (pedidoNovo) {
@@ -99,17 +79,19 @@ public class PedidoRestService {
 			pedidosMock.add(pedido);
 		}
 
-		String responseBody = " pedido " + item.getIdPedido() + 
-						   	  " do cliente " + idCliente + 
-							  " adicionou o produto " + item.getItem().getIdProduto();
+		logger.info(" O cliente " + idCliente + 
+					" adicionou o produto " + item.getItem().getIdProduto() +
+					" ao pedido " + item.getIdPedido());
 
-		return responseBody;
+		return pedido;
 	}
 
 	@POST
 	@Path("item/remove")
 	@Consumes(MediaType.APPLICATION_JSON)
 	public void removeItemPedido(ItemPedidoDTO item) {
+		logger.info(Messages.MSG_CLIENT_REMOVED_ITEM_FROM_ORDER);
+
 		long idCliente = 0;
 
 		for (Pedido pedido : pedidosMock) {
@@ -127,6 +109,8 @@ public class PedidoRestService {
 	@PUT
 	@Path("pedido/{idPedido}")
 	public void pagaPedido(@PathParam("idPedido") long idPedido) {
+		logger.info(Messages.MSG_CLIENT_HAS_PAID_ORDER);
+
 		for (Pedido pedido : pedidosMock) {
 
 			if (pedido.getId() == idPedido) {
@@ -140,10 +124,12 @@ public class PedidoRestService {
 	@DELETE
 	@Path("pedido/{idPedido}")
 	public void cancelaPedido(@PathParam("idPedido") long idPedido) {
+		logger.info(Messages.MSG_CLIENT_HAS_CANCELED_ORDER);
+
 		for (Pedido pedido : pedidosMock) {
 
 			if (pedido.getId() == idPedido) {
-				pedido.setStatus(StatusPedido.CANCELADO);
+				pedido.setStatus(StatusPedido.CANCELADO); 
 			}
 		}
 
@@ -151,10 +137,30 @@ public class PedidoRestService {
 	}
 
 	@GET
-	@Path("test/")
 	@Produces(MediaType.APPLICATION_JSON)
-	public String test() {
-		return "OK - PedidoRestService: GET request to 'test/' endpoint";
+	public List<Pedido> buscarPedidos() {
+		logger.info(Messages.MSG_SEARCHED_ORDERS);
+		
+		return pedidosMock;
+	}
+
+	@GET
+	@Path("pedido/{idCliente}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<Pedido> buscarPedidosPorCliente(@PathParam("idCliente") long idCliente) {
+		logger.info(Messages.MSG_SEARCHED_ORDER_BY_CLIENT);
+
+		List<Pedido> pedidos = new ArrayList<Pedido>();
+		
+		for (Pedido pedido : pedidosMock) {
+
+			if (pedido.getIdCliente() == idCliente)
+				pedidos.add(pedido);
+		}
+
+		logger.info("cliente " + idCliente + " possui " + pedidos.size() + " pedidos");
+		
+		return pedidos;
 	}
 
 }
