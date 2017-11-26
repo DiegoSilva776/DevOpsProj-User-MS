@@ -73,6 +73,7 @@ public class HttpRequestTest {
         // Create and run the POST request 
         UrlBuilder urlBuilder = new UrlBuilder(port);
         HttpEntity<ItemPedidoDTO> entity = new HttpEntity<ItemPedidoDTO>(requestAddPedido, headers);
+
 		ResponseEntity<Pedido> response = restTemplate.exchange(
             urlBuilder.getAddPedidoUrl(), 
             HttpMethod.POST, 
@@ -111,6 +112,7 @@ public class HttpRequestTest {
 
         // Create and run the GET request 
         UrlBuilder urlBuilder = new UrlBuilder(port);
+
         ResponseEntity<ArrayList<Pedido>> response = this.restTemplate.exchange(
             urlBuilder.getPedidosUrl(),
             HttpMethod.GET,
@@ -137,8 +139,9 @@ public class HttpRequestTest {
 
         // Create and run the GET request 
         UrlBuilder urlBuilder = new UrlBuilder(port);
+
         ResponseEntity<ArrayList<Pedido>> response = this.restTemplate.exchange(
-            urlBuilder.getPedidoByCliente(CLIENT_ID),
+            urlBuilder.getPedidoByClienteUrl(CLIENT_ID),
             HttpMethod.GET,
             null,
             new ParameterizedTypeReference<ArrayList<Pedido>>(){}
@@ -177,6 +180,7 @@ public class HttpRequestTest {
         
         // Create and run the PUT request 
         UrlBuilder urlBuilder = new UrlBuilder(port);
+
         ResponseEntity<Pedido> response = restTemplate.exchange(
             urlBuilder.getUpdatePedidoUrl(ORDER_ID), 
             HttpMethod.PUT, 
@@ -203,6 +207,7 @@ public class HttpRequestTest {
         
         // Create and run the PUT request 
         UrlBuilder urlBuilder = new UrlBuilder(port);
+
         ResponseEntity<Pedido> response = restTemplate.exchange(
             urlBuilder.getUpdatePedidoUrl(ORDER_ID), 
             HttpMethod.DELETE, 
@@ -240,6 +245,7 @@ public class HttpRequestTest {
         // Create and run the POST request 
         UrlBuilder urlBuilder = new UrlBuilder(port);
         HttpEntity<ItemPedidoDTO> entity = new HttpEntity<ItemPedidoDTO>(requestRemovePedido, headers);
+        
 		ResponseEntity<Pedido> response = restTemplate.exchange(
             urlBuilder.getRemovePedidoUrl(), 
             HttpMethod.POST, 

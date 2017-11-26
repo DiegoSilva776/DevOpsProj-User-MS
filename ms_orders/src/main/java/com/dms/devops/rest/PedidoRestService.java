@@ -19,11 +19,17 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import org.springframework.web.client.RestTemplate;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.dms.devops.commons.Messages;
+import com.dms.devops.commons.UrlBuilder;
 
+import com.dms.devops.domain.cliente.Cliente;
 import com.dms.devops.domain.pedido.Pedido;
 import com.dms.devops.domain.pedido.StatusPedido;
 import com.dms.devops.dto.pedido.ItemPedidoDTO;
@@ -52,15 +58,12 @@ public class PedidoRestService {
 		}
 
 		// Se o pedido já existe, adiciona o novo item
-		long idCliente = 0;
 		boolean pedidoNovo = true;
-
+			
 		for (Pedido pedido : PedidoRestService.pedidosMock) {
 
 			if (pedido.getId() == item.getIdPedido()) {
 				pedido.getItems().add(item.getItem());
-
-				idCliente = pedido.getIdCliente();
 				pedidoNovo = false;
 			}
 		}
@@ -69,8 +72,6 @@ public class PedidoRestService {
 		Pedido pedido = new Pedido();
 
 		if (pedidoNovo) {
-			idCliente = item.getIdCliente();
-
 			pedido.setId(item.getIdPedido());
 			pedido.setDataPedido(new Date());
 			pedido.setIdCliente(item.getIdCliente());
@@ -80,11 +81,49 @@ public class PedidoRestService {
 			PedidoRestService.pedidosMock.add(pedido);
 		}
 
-		logger.info("\n\n>O cliente " + idCliente + 
+		logger.info("\n\n>O cliente " + item.getIdCliente() +
 					" adicionou o produto " + item.getItem().getIdProduto() +
 					" ao pedido " + item.getIdPedido() + "\n");
 
 		return pedido;
+	}
+
+	/**
+	 * Verify the existence of the client by making a request to an endpoint of the ms_users micro service
+	 */
+	private Boolean verifyClient(long clientId) {
+		boolean clientVerified = true;
+
+		try {
+			RestTemplate restTemplate = new RestTemplate();
+			UrlBuilder urlBuilder = new UrlBuilder();
+
+			ResponseEntity<Cliente> response = restTemplate.exchange(
+				urlBuilder.getUserByIdUrl(clientId),
+				HttpMethod.GET,
+				null,
+				Cliente.class
+			);
+
+			// Verify the response
+			Cliente cliente = response.getBody();
+
+			// Verify if the given clientId is ok in the ms_user micro service
+			if (cliente != null) {
+
+				if (cliente.getId() != clientId) {
+					clientVerified = false;
+				}
+			} else {
+				clientVerified = false;
+			}
+		} catch(Exception e) {
+			clientVerified = false;
+
+			logger.info(e.getMessage());
+		}
+
+		return false;
 	}
 
 	@POST
