@@ -35,3 +35,19 @@
 
 > O cliente Cliente 0 foi buscado
 
+2017-11-26 00:53:10.742 [http-nio-8082-exec-2] INFO  com.dms.devops.rest.ClienteRestService - 
+
+>ClienteRestService: getCliente: 
+
+2017-11-26 00:53:10.754 [http-nio-8082-exec-2] INFO  com.dms.devops.rest.ClienteRestService - 
+
+> O cliente Cliente 0 foi buscado
+
+2017-11-26 00:55:08.066 [http-nio-8082-exec-4] INFO  com.dms.devops.rest.ClienteRestService - 
+
+>ClienteRestService: getCliente: 
+
+2017-11-26 00:55:08.068 [http-nio-8082-exec-4] INFO  com.dms.devops.rest.ClienteRestService - 
+
+> O cliente Cliente 0 foi buscado
+
