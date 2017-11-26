@@ -1,11 +1,10 @@
 package com.dms.devops;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
 import org.junit.FixMethodOrder;
+import static org.junit.Assert.assertTrue;
 
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -25,11 +24,6 @@ import org.springframework.http.ResponseEntity;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Call;
-import okhttp3.FormBody;
-
 import java.util.ArrayList;
 
 import com.dms.devops.commons.Messages;
@@ -39,6 +33,7 @@ import com.dms.devops.rest.PedidoRestService;
 import com.dms.devops.dto.pedido.ItemPedidoDTO;
 import com.dms.devops.domain.pedido.ItemPedido;
 import com.dms.devops.domain.pedido.Pedido;
+import com.dms.devops.domain.pedido.StatusPedido;
 
 
 @RunWith(SpringRunner.class)
@@ -57,7 +52,7 @@ public class HttpRequestTest {
 
 
     @Test
-    public void testAddPedido() throws Exception {
+    public void test1AddPedido() throws Exception {
         logger.info(Messages.MSG_TEST_ADD_PEDIDO_OPENING);
 
         // Build a new Pedido
@@ -89,8 +84,8 @@ public class HttpRequestTest {
         Pedido newPedido = response.getBody();
         
         // Pedido object contains the same client and order ids?
-        assertThat(newPedido.getId() == ORDER_ID);
-        assertThat(newPedido.getIdCliente() == CLIENT_ID);
+        assertTrue(newPedido.getId() == ORDER_ID);
+        assertTrue(newPedido.getIdCliente() == CLIENT_ID);
         
         // Pedido object contains the new item?
         boolean hasSameItem = false;
@@ -104,14 +99,14 @@ public class HttpRequestTest {
             }
         }
 
-        assertThat(hasSameItem);
+        assertTrue(hasSameItem);
         
         // Test succeeded
         logger.info(Messages.MSG_TEST_ADD_PEDIDO_CLOSURE);
     }
 
     @Test
-    public void testGetPedidos() throws Exception {
+    public void test2GetPedidos() throws Exception {
         logger.info(Messages.MSG_TEST_GET_ALL_PEDIDOS_OPENING);
 
         // Create and run the GET request 
@@ -127,14 +122,14 @@ public class HttpRequestTest {
         ArrayList<Pedido> pedidos = response.getBody();
 
         // Is there at least one Pedido?
-        assertThat(pedidos.size() > 0);
+        assertTrue(pedidos.size() > 0);
 
         // Test succeeded
         logger.info(Messages.MSG_TEST_GET_ALL_PEDIDOS_CLOSURE);
     }
 
     @Test
-    public void testGetPedidoByCliente() throws Exception {
+    public void test3GetPedidoByCliente() throws Exception {
         logger.info(Messages.MSG_TEST_GET_PEDIDO_BY_CLIENT_OPENING);
 
         // Build the search params
@@ -153,7 +148,7 @@ public class HttpRequestTest {
         ArrayList<Pedido> pedidos = response.getBody();
 
         // Is there at least one Pedido?
-        assertThat(pedidos.size() > 0);
+        assertTrue(pedidos.size() > 0);
 
         // The Pedidos really belong to the Cliente?
         boolean pedidosBelongToCliente = true;
@@ -167,14 +162,66 @@ public class HttpRequestTest {
             }
         }
 
-        assertThat(pedidosBelongToCliente);
+        assertTrue(pedidosBelongToCliente);
 
         // Test succeeded
         logger.info(Messages.MSG_TEST_GET_PEDIDO_BY_CLIENT_CLOSURE);
     }
 
     @Test
-    public void testRemoveItemPedido() throws Exception {
+    public void test4PayPedido() throws Exception {
+        logger.info(Messages.MSG_TEST_PAY_PEDIDO_OPENING);
+
+        // Set the operation params
+        long ORDER_ID = 0;
+        
+        // Create and run the PUT request 
+        UrlBuilder urlBuilder = new UrlBuilder(port);
+        ResponseEntity<Pedido> response = restTemplate.exchange(
+            urlBuilder.getUpdatePedidoUrl(ORDER_ID), 
+            HttpMethod.PUT, 
+            null, 
+            Pedido.class
+        );
+
+        // Verify the response
+        Pedido updatedPedido = response.getBody();
+
+        // Was the status of the order changed to paid?
+        assertTrue(updatedPedido.getStatus().equals(StatusPedido.CONCLUIDO));
+        
+        // Test succeeded
+        logger.info(Messages.MSG_TEST_PAY_PEDIDO_CLOSURE);
+    }
+
+    @Test
+    public void test5CancelPedido() throws Exception {
+        logger.info(Messages.MSG_TEST_CANCEL_PEDIDO_OPENING);
+
+        // Set the operation params
+        long ORDER_ID = 0;
+        
+        // Create and run the PUT request 
+        UrlBuilder urlBuilder = new UrlBuilder(port);
+        ResponseEntity<Pedido> response = restTemplate.exchange(
+            urlBuilder.getUpdatePedidoUrl(ORDER_ID), 
+            HttpMethod.DELETE, 
+            null, 
+            Pedido.class
+        );
+
+        // Verify the response
+        Pedido updatedPedido = response.getBody();
+
+        // Was the status of the order changed to paid?
+        assertTrue(updatedPedido.getStatus().equals(StatusPedido.CANCELADO));
+
+        // Test succeeded
+        logger.info(Messages.MSG_TEST_CANCEL_PEDIDO_CLOSURE);
+    }
+
+    @Test
+    public void test6RemoveItemPedido() throws Exception {
         logger.info(Messages.MSG_TEST_REMOVE_ITEM_PEDIDO_OPENING);
 
         // Build the object that carries the values necessary to remove an item from a Pedido
@@ -219,7 +266,7 @@ public class HttpRequestTest {
                     }
                 }
 
-                assertThat(doesntHaveRemovedItem);
+                assertTrue(doesntHaveRemovedItem);
             }
         }
         

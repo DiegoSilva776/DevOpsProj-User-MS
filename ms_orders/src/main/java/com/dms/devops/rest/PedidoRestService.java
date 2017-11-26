@@ -70,6 +70,7 @@ public class PedidoRestService {
 
 		if (pedidoNovo) {
 			idCliente = item.getIdCliente();
+
 			pedido.setId(item.getIdPedido());
 			pedido.setDataPedido(new Date());
 			pedido.setIdCliente(item.getIdCliente());
@@ -101,6 +102,7 @@ public class PedidoRestService {
 
 			if (pedido.getId() == item.getIdPedido()) {
 				pedido.getItems().remove(item.getItem());
+
 				idCliente = pedido.getIdCliente();
 				updatedPedido = pedido;
 			}
@@ -115,34 +117,48 @@ public class PedidoRestService {
 
 	@PUT
 	@Path("pedido/{idPedido}")
-	public void pagaPedido(@PathParam("idPedido") long idPedido) {
+	public Pedido pagaPedido(@PathParam("idPedido") long idPedido) {
 		logger.info(Messages.MSG_CLIENT_HAS_PAID_ORDER);
 
 		// Se existe um Pedido com o id do Pedido passado na request, 
 		// altera o seus status para CONCLUIDO
+		Pedido upatedPedido = null;
+
 		for (Pedido pedido : PedidoRestService.pedidosMock) {
 
 			if (pedido.getId() == idPedido) {
 				pedido.setStatus(StatusPedido.CONCLUIDO);
+
+				upatedPedido = pedido;
 			}
 		}
 
 		logger.info("\n\n>Pedido " + idPedido + " efetivado\n");
+
+		return upatedPedido;
 	}
 
 	@DELETE
 	@Path("pedido/{idPedido}")
-	public void cancelaPedido(@PathParam("idPedido") long idPedido) {
+	public Pedido cancelaPedido(@PathParam("idPedido") long idPedido) {
 		logger.info(Messages.MSG_CLIENT_HAS_CANCELED_ORDER);
+
+		// Se existe um Pedido com o id do Pedido passado na request, 
+		// altera o seus status para CANCELADO
+		Pedido upatedPedido = null;
 
 		for (Pedido pedido : PedidoRestService.pedidosMock) {
 
 			if (pedido.getId() == idPedido) {
-				pedido.setStatus(StatusPedido.CANCELADO); 
+				pedido.setStatus(StatusPedido.CANCELADO);
+
+				upatedPedido = pedido;
 			}
 		}
 
 		logger.info("\n\n>Pedido " + idPedido + " cancelado\n");
+
+		return upatedPedido;
 	}
 
 	@GET

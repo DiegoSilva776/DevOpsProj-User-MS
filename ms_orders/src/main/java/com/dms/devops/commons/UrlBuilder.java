@@ -19,6 +19,10 @@ public class UrlBuilder {
         return this.BASE_URL + this.port + "/pedidorest/item/remove/";
     }
 
+    public String getUpdatePedidoUrl(long pedidoId) {
+        return this.BASE_URL + this.port + "/pedidorest/pedido/" + String.valueOf(pedidoId);
+    }
+
     public String getPedidosUrl() {
         return this.BASE_URL + this.port + "/pedidorest/";
     }
@@ -28,4 +32,3 @@ public class UrlBuilder {
     }
 
 }
-
