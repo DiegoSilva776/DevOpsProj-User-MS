@@ -10,7 +10,7 @@ curl -H "Content-Type: application/json" -X POST -d '{"idPedido": 1,"idCliente":
 #Consultado todos os pedidos
 curl http://localhost:8083/pedidorest/
 
-#Efetivando pedido (mudar o status para concluido
+#Efetivando pedido (mudar o status para concluido)
 curl -X PUT http://localhost:8083/pedidorest/pedido/1
 
 

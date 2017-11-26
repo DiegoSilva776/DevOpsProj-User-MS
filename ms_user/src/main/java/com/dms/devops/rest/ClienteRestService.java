@@ -23,6 +23,11 @@ public class ClienteRestService {
 	private static long contadorErroCaotico;
 
 	static {
+		Cliente cliente0 = new Cliente();
+		cliente0.setId(0);
+		cliente0.setNome("Cliente 0");
+		cliente0.setEmail("customer0@gmail.com");
+
 		Cliente cliente1 = new Cliente();
 		cliente1.setId(1);
 		cliente1.setNome("Cliente 1");
@@ -48,6 +53,7 @@ public class ClienteRestService {
 		cliente5.setNome("Cliente 5");
 		cliente5.setEmail("customer5@gmail.com");
 
+		clientes.put(cliente0.getId(), cliente0);
 		clientes.put(cliente1.getId(), cliente1);
 		clientes.put(cliente2.getId(), cliente2);
 		clientes.put(cliente3.getId(), cliente3);
@@ -64,9 +70,9 @@ public class ClienteRestService {
 	}
 
 	@GET
-	@Path("cliente")
+	@Path("cliente/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Cliente getCliente(@QueryParam("id") long id) {
+	public Cliente getCliente(@PathParam("id") long id) {
 		Cliente cli = null;
 
 		for (Cliente c : clientes.values()) {
