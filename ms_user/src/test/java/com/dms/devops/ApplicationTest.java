@@ -11,9 +11,7 @@ public class ApplicationTest {
 
     @Test
     public void contextLoads() throws Exception {
-        System.out.println("");
-        System.out.println(">>>>>>> MS_User: ApplicationTest: OK. The application context was built.");
-        System.out.println("");
+        System.out.println("\n\n>>> MS_User: ApplicationTest: OK. The application context was built.\n");
     }
 
 }

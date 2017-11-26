@@ -71,14 +71,6 @@
 		</dependency>
 		<!-- ./Logging -->
 
-		<!-- HTTP -->
-		<dependency>
-			<groupId>com.squareup.okhttp3</groupId>
-			<artifactId>okhttp</artifactId>
-			<version>${com.squareup.okhttp3.version}</version>
-		</dependency>
-		<!-- ./HTTP -->
-
 	</dependencies>
 
 	<properties>

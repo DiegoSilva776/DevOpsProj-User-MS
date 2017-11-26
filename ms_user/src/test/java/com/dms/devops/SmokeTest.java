@@ -20,10 +20,7 @@ public class SmokeTest {
     @Test
     public void contexLoads() throws Exception {
         assertThat(clientService).isNotNull();
-
-        System.out.println("");
-        System.out.println(">>>>>>> MS_User: SmokeTest: OK. The ClienteRestServe was AutoWired.");
-        System.out.println("");
+        System.out.println("\n\n>>> MS_User: SmokeTest: OK. The ClienteRestServe was AutoWired.\n");
     }
 
 }

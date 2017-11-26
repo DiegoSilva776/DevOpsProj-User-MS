@@ -70,11 +70,12 @@
 		    <version>1.7.0</version>
 		</dependency>
 		<!-- ./Logging -->
-		
+
 	</dependencies>
 
 	<properties>
         <java.version>1.8</java.version>
+		<com.squareup.okhttp3.version>3.4.1</com.squareup.okhttp3.version>
     </properties>
 
 	<build>
@@ -87,5 +88,5 @@
         </plugins>
 
     </build>
-	
+
 </project>

@@ -1,6 +1,7 @@
 package com.dms.devops.rest;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.dms.devops.domain.cliente.Cliente;
 import org.apache.logging.log4j.LogManager;
@@ -12,6 +13,9 @@ import javax.ws.rs.core.MediaType;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+
+import com.dms.devops.commons.Messages;
+
 
 @Controller
 @Named
@@ -53,69 +57,91 @@ public class ClienteRestService {
 		cliente5.setNome("Cliente 5");
 		cliente5.setEmail("customer5@gmail.com");
 
-		clientes.put(cliente0.getId(), cliente0);
-		clientes.put(cliente1.getId(), cliente1);
-		clientes.put(cliente2.getId(), cliente2);
-		clientes.put(cliente3.getId(), cliente3);
-		clientes.put(cliente4.getId(), cliente4);
-		clientes.put(cliente5.getId(), cliente5);
+		ClienteRestService.clientes.put(cliente0.getId(), cliente0);
+		ClienteRestService.clientes.put(cliente1.getId(), cliente1);
+		ClienteRestService.clientes.put(cliente2.getId(), cliente2);
+		ClienteRestService.clientes.put(cliente3.getId(), cliente3);
+		ClienteRestService.clientes.put(cliente4.getId(), cliente4);
+		ClienteRestService.clientes.put(cliente5.getId(), cliente5);
+	}
+
+	@POST
+	@Consumes(MediaType.APPLICATION_JSON)
+	public String addCliente(Cliente cliente) {
+		logger.info(Messages.MSG_ADD_CLIENTE);
+
+		ClienteRestService.clientes.put(cliente.getId(), cliente);
+
+		logger.info("\n\n> O cliente " + cliente.getId() + " foi inserido!\n");
+
+		return Messages.SIMPLE_RESPONSE_CLIENTE_ADDED;
+	}
+
+	@PUT
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Cliente mergeCliente(Cliente cliente) {
+		logger.info(Messages.MSG_MERGE_CLIENTE);
+
+		// Lança um erro de tempos em tesmpos
+		contadorErroCaotico++;
+
+		if ((contadorErroCaotico) % 7 == 0) {
+			throw new RuntimeException(Messages.MSG_ERROR_CRAZY_ERROR_OCURRED);
+		}
+
+		// Atualiza Cliente
+		Cliente temp = ClienteRestService.clientes.get(cliente.getId());
+		temp.setNome(cliente.getNome());
+		temp.setEmail(cliente.getEmail());
+		ClienteRestService.clientes.put(cliente.getId(), temp);
+
+		logger.info("\n\n> O cliente " + cliente.getId() + " foi alterado!\n");
+
+		return temp;
+	}
+
+	@DELETE
+	@Path("cliente/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Map<Long, Cliente> deleteCliente(@PathParam("id") long id) {
+		logger.info(Messages.MSG_DELETE_CLIENTE);
+
+		ClienteRestService.clientes.remove(id);
+
+		logger.info("\n\n> O cliente " + id + " foi excluido!\n");
+
+		return ClienteRestService.clientes;
 	}
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public Collection<Cliente> getClientes() {
-		logger.info("Foram buscados " + clientes.values().size() + " clientes");
+		logger.info(Messages.MSG_GET_CLIENTES);
 
-		return clientes.values();
+		logger.info("\n\n> Foram buscados " + ClienteRestService.clientes.values().size() + " clientes\n");
+
+		return ClienteRestService.clientes.values();
 	}
 
 	@GET
 	@Path("cliente/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Cliente getCliente(@PathParam("id") long id) {
+		logger.info(Messages.MSG_GET_CLIENTE);
+
+		// Encontra um Cliente pelo seu id e o retorna
 		Cliente cli = null;
 
-		for (Cliente c : clientes.values()) {
+		for (Cliente c : ClienteRestService.clientes.values()) {
 
-			if (c.getId() == id)
+			if (c.getId() == id) {
 				cli = c;
+			}
 		}
 
-		logger.info("foi buscado o cliente " + cli.getNome());
+		logger.info("\n\n> O cliente " + cli.getNome() + " foi buscado\n");
 
 		return cli;
-	}
-
-	@POST
-	@Consumes(MediaType.APPLICATION_JSON)
-	public void addCliente(Cliente cliente) {
-		logger.warn("O cliente " + cliente.getId() + " foi inserido!");
-
-		clientes.put(cliente.getId(), cliente);
-	}
-
-	@PUT
-	@Consumes(MediaType.APPLICATION_JSON)
-	public void mergeCliente(Cliente cliente) {
-		contadorErroCaotico++;
-
-		if ((contadorErroCaotico) % 7 == 0) {
-			throw new RuntimeException("Ocorreu um erro loko!");
-		}
-
-		logger.info("O cliente " + cliente.getId() + " foi alterado!");
-
-		Cliente temp = clientes.get(cliente.getId());
-
-		temp.setNome(cliente.getNome());
-		temp.setEmail(cliente.getEmail());
-	}
-
-	@DELETE
-	public void deleteCliente(@QueryParam("id") long id) {
-		logger.info("O cliente " + id + " foi excluido!");
-
-		clientes.remove(id);
 	}
 
 }
