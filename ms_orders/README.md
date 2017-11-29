@@ -4,7 +4,7 @@ This microservice is used to manage orders
 
 ### Objectives
 * CRUD oders
-* Persist the results of the actions into a dabatase
+* Persist the results of the actions into a mock database
 * Return meaningful data as JSON objects, in order to allow relationships with other entities of the system
 
 ### Running SOA-Monolith
@@ -15,3 +15,5 @@ This microservice is used to manage orders
     $ mvn spring-boot:run
    ```
 3. Perform CRUD operations
+.....
+..
