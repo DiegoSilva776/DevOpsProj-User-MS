@@ -1,4 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: com.dms.devops.HttpRequestTest
 -------------------------------------------------------------------------------
-Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 13.119 sec - in com.dms.devops.HttpRequestTest
+Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 13.193 sec - in com.dms.devops.HttpRequestTest
