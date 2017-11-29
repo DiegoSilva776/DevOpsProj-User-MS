@@ -134,4 +134,4 @@ This microservice is used to manage users
     sudo docker run -p 8082:8082 --name -t diegosilva776/ms_user:0.1
    ```
 
-.
+....
